@@ -34,7 +34,9 @@ properties:
       - items:
           - enum:
               - milkv,duo-s
+              - milkv,duo256m
           - const: sophgo,sg2000
+          - const: sophgo,sg2002
       - items:
           - enum:
               - sipeed,licheerv-nano-b
