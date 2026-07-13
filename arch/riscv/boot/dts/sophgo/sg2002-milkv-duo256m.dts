@@ -109,6 +109,14 @@
 	disable-wp;
 };
 
+&mdio {
+	status = "okay";
+};
+
+&gmac0 {
+	status = "okay";
+};
+
 &uart0 {
 	pinctrl-0 = <&uart0_cfg>;
 	pinctrl-names = "default";

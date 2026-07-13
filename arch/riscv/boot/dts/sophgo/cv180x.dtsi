@@ -57,30 +57,16 @@
 			#reset-cells = <1>;
 		};
 
-		mdio: mdio-mux@3009800 {
-			compatible = "mdio-mux-mmioreg", "mdio-mux";
-			reg = <0x3009800 0x4>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			mdio-parent-bus = <&gmac0_mdio>;
-			mux-mask = <0x80>;
-			status = "disabled";
+		ephy_ctrl: syscon@3009800 {
+			compatible = "sophgo,cv1800b-ephy-ctrl", "simple-mfd",
+				     "syscon";
+			reg = <0x3009800 0x8>;
+			#reset-cells = <0>;
 
-			internal_mdio: mdio@0 {
-				#address-cells = <1>;
-				#size-cells = <0>;
-				reg = <0>;
-
-				internal_ephy: phy@0 {
-					compatible = "ethernet-phy-ieee802.3-c22";
-					reg = <1>;
-				};
-			};
-
-			external_mdio: mdio@80 {
-				#address-cells = <1>;
-				#size-cells = <0>;
-				reg = <0x80>;
+			ephy_mux: mux-controller {
+				compatible = "mmio-mux";
+				#mux-control-cells = <1>;
+				mux-reg-masks = <0x0 0x80>;
 			};
 		};
 
@@ -476,6 +462,36 @@
 			clocks = <&clk CLK_RTC_25M>,
 				 <&clk CLK_SRC_RTC_SYS_0>;
 			clock-names = "rtc", "mcu";
+		};
+	};
+
+	mdio: mdio-mux {
+		compatible = "mdio-mux-multiplexer";
+		mux-controls = <&ephy_mux 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		mdio-parent-bus = <&gmac0_mdio>;
+		status = "disabled";
+
+		internal_mdio: mdio@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+
+			internal_ephy: phy@1 {
+				compatible = "ethernet-phy-id0043.5649",
+					     "ethernet-phy-ieee802.3-c22";
+				reg = <1>;
+				resets = <&ephy_ctrl>;
+				reset-names = "phy";
+				reset-deassert-us = <10>;
+			};
+		};
+
+		external_mdio: mdio@1 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
 		};
 	};
 };
