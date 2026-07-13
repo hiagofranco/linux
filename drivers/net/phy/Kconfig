@@ -407,6 +407,12 @@ config SMSC_PHY
 	help
 	  Currently supports the LAN83C185, LAN8187 and LAN8700 PHYs
 
+config SOPHGO_PHY
+	tristate "Sophgo PHYs"
+	help
+	  Currently supports the internal 10/100 ethernet PHY of the
+	  Sophgo CV18xx/SG200x SoCs.
+
 config STE10XP
 	tristate "STMicroelectronics STe10Xp PHYs"
 	help
